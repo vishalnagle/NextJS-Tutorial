@@ -1,0 +1,28 @@
+Udemy Next.js & React - The Complete Guide By Maxmilian Schwarzmuller:
+
+Topics:
+
+1.Getting Started
+2.Optional:React Refresher
+3.NextJS Essentials (App Router)
+4.Routing & Page Rendering - Deep Dive
+5.Data Fetching - Deep Dive
+6.Mutating Data - Deep Dive
+7.Understanding & Configuring Caching
+8.NextJS App Optimizations
+9.User Authentication
+10.Roundup & Next Steps
+11.Pages & File Based Routing
+12.Project Time: Working With File Based Routing
+13.Page Pre Rendering & Data Fetching
+14.Project Time: Page Pre Rendering & Data Fetching
+15.Optimizing NextJS Apps
+16.Adding Backend Code with API Routes(Fullstack React)
+17.Project Time: API Routes
+18.Working with App wide state (React Context)
+19.Complete App Example: Build a Full Blog A to Z
+20.Deploying NextJS Apps
+21.Adding Authentication
+22.Optional: NextJS Summary
+23.Course Roundup
+
