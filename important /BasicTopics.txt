@@ -1,0 +1,214 @@
+
+1. Introduction to Next.js
+
+What is Next.js?
+Next.js is a React framework that enables server-side rendering (SSR) and static site generation (SSG), providing optimized performance, 
+SEO benefits, and an improved developer experience.
+
+Benefits of Next.js
+
+Automatic Code Splitting: Loads only necessary JavaScript for each page.
+File-Based Routing: Easy-to-use routing system based on the file structure.
+SSR & SSG: Supports both server-side rendering and static site generation.
+API Routes: Create backend API endpoints within the same project.
+Built-in CSS & Image Optimization: Enhances performance.
+
+2. Project Setup
+
+To create a new Next.js project, use the following command:
+
+npx create-next-app@latest my-next-app
+# or
+yarn create next-app my-next-app
+# or
+pnpm create next-app my-next-app
+
+Navigate into the project and start the development server:
+
+cd my-next-app
+npm run dev
+Now, open http://localhost:3000 in the browser to see your Next.js app running.v
+
+
+3. File-Based Routing
+
+Next.js follows a file-based routing system where the pages directory determines the application's routes.
+
+Example:
+pages/index.js → Accessible at /
+pages/about.js → Accessible at /about
+Creating a new route (about.js):
+
+// pages/about.js
+export default function About() {
+  return <h1>About Page</h1>;
+}
+Now, visiting /about in the browser will show the "About Page".
+
+4. Pages and Components
+
+Pages
+
+Pages are React components inside the pages directory that are mapped to routes.
+
+// pages/contact.js
+export default function Contact() {
+  return <h1>Contact Page</h1>;
+}
+
+
+// pages/contact.js
+export default function Contact() {
+  return <h1>Contact Page</h1>;
+}
+
+Components
+
+Components are reusable UI elements that can be used inside pages.
+
+Example:
+
+// components/Button.js
+export default function Button({ label }) {
+  return <button>{label}</button>;
+}
+
+
+// pages/index.js
+import Button from "../components/Button";
+
+export default function Home() {
+  return (
+    <div>
+      <h1>Home Page</h1>
+      <Button label="Click Me" />
+    </div>
+  );
+}
+
+
+5. Static Generation (SSG)
+
+Next.js can generate static pages at build time using getStaticProps.
+
+// pages/posts.js
+export async function getStaticProps() {
+  const posts = [
+    { id: 1, title: "Next.js is awesome" },
+    { id: 2, title: "SSG improves performance" },
+  ];
+
+  return { props: { posts } };
+}
+
+export default function Posts({ posts }) {
+  return (
+    <div>
+      <h1>Blog Posts</h1>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+The page is pre-built at build time.
+The generated HTML is cached and served fast.
+
+
+6. Server-Side Rendering (SSR)
+
+If data changes frequently, we can use server-side rendering (getServerSideProps) to fetch data on every request.
+
+// pages/latest-news.js
+export async function getServerSideProps() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts = await res.json();
+
+  return { props: { posts } };
+}
+
+export default function LatestNews({ posts }) {
+  return (
+    <div>
+      <h1>Latest News</h1>
+      <ul>
+        {posts.slice(0, 5).map((post) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+
+The data is fetched on every request.
+Useful for dynamic content like dashboards and news feeds.
+
+
+7. CSS and Styling
+
+Next.js supports multiple ways to style components:
+
+/* styles/globals.css */
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
+
+/* styles/Button.module.css */
+.button {
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+
+// components/Button.js
+import styles from "../styles/Button.module.css";
+
+export default function Button({ label }) {
+  return <button className={styles.button}>{label}</button>;
+}
+
+
+Next.js provides an optimized <Image> component to improve performance.
+
+import Image from "next/image";
+import profilePic from "../public/profile.jpg";
+
+export default function Profile() {
+  return (
+    <div>
+      <h1>Profile Page</h1>
+      <Image src={profilePic} alt="Profile Picture" width={200} height={200} />
+    </div>
+  );
+}
+
+
+Benefits:
+
+Automatic optimization: Loads the appropriate size based on the device.
+Lazy loading: Images are loaded only when needed.
+Better performance: Uses modern formats like WebP.
+
+
+Summary
+
+Introduction	Next.js is a React framework for SSR, SSG, and better performance.
+Project Setup	npx create-next-app my-app to create a Next.js project.
+File-Based Routing	Pages in pages/ directory automatically become routes.
+Pages & Components	Pages are route-specific, components are reusable UI parts.
+SSG	Pre-builds pages at build time (getStaticProps).
+SSR	Fetches data at request time (getServerSideProps).
+CSS Styling	Supports global CSS, CSS Modules, and Styled Components.
+Image Optimization	Uses <Image> for faster and optimized images.
+
+
+

@@ -1,0 +1,176 @@
+
+1. Dynamic Routing
+
+Dynamic routing allows you to create flexible routes that handle different data dynamically.
+
+Example:
+
+Create a file inside the pages folder:
+
+pages/product/[id].js
+
+Inside pages/product/[id].js:
+
+import { useRouter } from 'next/router';
+
+const ProductPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
+  return <h1>Product ID: {id}</h1>;
+};
+
+export default ProductPage;
+
+
+Now, visiting /product/123 will render:
+
+Product ID: 123
+
+
+2. API Routes
+
+API routes allow you to create backend endpoints inside the pages/api/ directory.
+
+Example:
+
+Create a file:
+
+pages/api/products.js
+
+Inside pages/api/products.js:
+
+export default function handler(req, res) {
+  const products = [
+    { id: 1, name: 'Laptop' },
+    { id: 2, name: 'Phone' },
+  ];
+
+  res.status(200).json(products);
+}
+
+Now, making a GET request to /api/products will return:
+
+[
+  { "id": 1, "name": "Laptop" },
+  { "id": 2, "name": "Phone" }
+]
+
+
+3. Data Fetching Methods
+
+Next.js provides multiple ways to fetch data:
+
+getStaticProps (For static generation)
+
+Used for fetching data at build time.
+
+export async function getStaticProps() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+  const posts = await res.json();
+
+  return {
+    props: { posts },
+  };
+}
+
+
+getServerSideProps (For server-side rendering)
+
+Runs on each request.
+
+export async function getServerSideProps() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+  const posts = await res.json();
+
+  return {
+    props: { posts },
+  };
+}
+
+
+getStaticPaths (For dynamic static paths)
+
+Used for pre-generating pages with dynamic parameters.
+
+export async function getStaticPaths() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+  const posts = await res.json();
+
+  const paths = posts.map(post => ({
+    params: { id: post.id.toString() },
+  }));
+
+  return { paths, fallback: false };
+}
+
+
+4. Environment Variables
+
+Environment variables allow you to securely store sensitive information.
+
+Example:
+
+Create a .env.local file:
+
+NEXT_PUBLIC_API_URL=https://jsonplaceholder.typicode.com
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+console.log(apiUrl);
+
+
+5. Middleware
+
+Middleware helps in handling tasks like authentication or logging before rendering a page.
+
+Example:
+
+Create _middleware.js in the pages directory:
+
+import { NextResponse } from 'next/server';
+
+export function middleware(req) {
+  const loggedIn = req.cookies.token;
+
+  if (!loggedIn) {
+    return NextResponse.redirect('/login');
+  }
+
+  return NextResponse.next();
+}
+
+
+6. TypeScript Integration
+
+TypeScript provides type safety and better developer experience.
+
+Example:
+
+Install TypeScript:
+
+npm install --save-dev typescript @types/react @types/
+
+Create a tsconfig.json file:
+
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "strict": true
+  }
+}
+
+Convert a React component to TypeScript:
+
+type Props = {
+  name: string;
+};
+
+const Greeting: React.FC<Props> = ({ name }) => {
+  return <h1>Hello, {name}</h1>;
+};
+
+export default Greeting;
+
+
+

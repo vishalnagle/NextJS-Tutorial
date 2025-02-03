@@ -1,0 +1,260 @@
+
+1.Incremental Static Regeneration (ISR)
+
+ISR allows you to update static content after the site has been built, 
+without needing to rebuild the entire application.
+
+Example:
+
+export async function getStaticProps() {
+  const res = await fetch('https://api.example.com/posts');
+  const posts = await res.json();
+
+  return {
+    props: { posts },
+    revalidate: 60, // Revalidate every 60 seconds
+  };
+}
+
+This means that every 60 seconds, Next.js will regenerate the page with fresh data from the API without requiring a full rebuild.
+
+
+2.Custom Document and App
+
+Next.js provides _document.js and _app.js (or _document.tsx and _app.tsx in TypeScript) 
+for customizing the default structure of pages.
+
+Custom _document.js
+Used for modifying the <html> and <body> structure.
+
+import { Html, Head, Main, NextScript } from 'next/document';
+
+export default function Document() {
+  return (
+    <Html lang="en">
+      <Head>
+        <meta name="description" content="My Custom Document" />
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}
+
+
+Custom _app.js
+Used for global state management, themes, and layouts.
+
+import '../styles/globals.css';
+
+export default function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+
+
+3.Performance Optimization
+
+Techniques to improve speed and efficiency.
+
+Code Splitting (Dynamic Imports)
+
+import dynamic from 'next/dynamic';
+
+const HeavyComponent = dynamic(() => import('../components/HeavyComponent'), { ssr: false });
+
+This loads HeavyComponent only when needed, reducing the initial bundle size.
+
+
+Lazy Loading Images
+
+import Image from 'next/image';
+
+export default function Home() {
+  return <Image src="/large-image.jpg" alt="Optimized Image" width={800} height={600} loading="lazy" />;
+}
+
+
+4.Internationalization (i18n)
+
+Adding support for multiple languages.
+
+Example: next.config.js
+
+module.exports = {
+  i18n: {
+    locales: ['en', 'fr', 'es'],
+    defaultLocale: 'en',
+  },
+};
+
+
+Dynamic Language Switching
+
+import { useRouter } from 'next/router';
+
+export default function Home() {
+  const { locale, push } = useRouter();
+
+  return (
+    <div>
+      <p>Current Language: {locale}</p>
+      <button onClick={() => push('/', '/', { locale: 'fr' })}>Switch to French</button>
+    </div>
+  );
+}
+
+
+5.Authentication and Authorization
+
+Secure login and role-based access.
+
+Example: Protecting a Page
+
+import { useSession } from 'next-auth/react';
+
+export default function Dashboard() {
+  const { data: session } = useSession();
+
+  if (!session) return <p>Access Denied</p>;
+
+  return <p>Welcome, {session.user.name}!</p>;
+}
+
+Here, only authenticated users can see the dashboard.
+
+
+6.Testing
+
+Writing tests for Next.js applications.
+
+Example: Unit Test with Jest
+
+import { render, screen } from '@testing-library/react';
+import Home from '../pages/index';
+
+test('renders welcome message', () => {
+  render(<Home />);
+  expect(screen.getByText('Welcome to Next.js!')).toBeInTheDocument();
+});
+
+
+7.Deployment Strategies
+
+Deploying Next.js apps on different platforms.
+
+Vercel: next build && next start
+Serverless (AWS Lambda): @sls-next/serverless-component
+Self-Hosting: next build && next start -p 3000
+
+8.Next.js 15 Specific Features
+
+Async Request API:
+
+Handles rendering and data fetching asynchronously.
+
+Example
+
+export default async function Page() {
+  const res = await fetch('https://api.example.com/data');
+  const data = await res.json();
+  return <div>{data.message}</div>;
+}
+
+This improves performance by allowing Next.js to handle requests more efficiently.
+
+Enhanced Caching Mechanism:
+
+Fine-tuning cache settings in next.config.js.
+
+Example
+
+module.exports = {
+  experimental: {
+    isrFlushToDisk: false,
+  },
+};
+
+This optimizes how ISR cache is handled.
+
+React 19 Support:
+
+Supports new React 19 features like improved error handling.
+
+Example: Enhanced Error Boundaries
+
+'use client';
+
+export default function ErrorBoundary({ error }) {
+  return <p>Something went wrong: {error.message}</p>;
+}
+
+
+Improved Forms and Server Actions:
+
+Better form handling with server actions.
+
+Example
+
+export async function action(formData) {
+  'use server';
+  const name = formData.get('name');
+  console.log('Received:', name);
+}
+
+
+Turbo Mode:
+
+Turbo improves development speed.
+
+Enabling Turbo Mode
+
+NEXT_TURBO=true next dev
+
+
+Self-Hosting Capabilities:
+
+More flexible deployment options.
+
+Example: Running Next.js with PM2
+
+pm2 start npm --name "next-app" -- start
+
+
+TypeScript Support for next.config.js:
+
+Write next.config.ts with TypeScript.
+
+Example
+
+import { NextConfig } from 'next';
+
+const config: NextConfig = {
+  reactStrictMode: true,
+};
+
+export default config;
+
+
+esbuild 0.19 Integration:
+
+Faster builds with esbuild.
+
+Example
+
+module.exports = {
+  experimental: {
+    swcPlugins: [['@swc/plugin-esbuild', {}]],
+  },
+};
+
+
+Updated Codemod CLI:
+
+Automate code transformations.
+
+Example: Running a Codemod
+
+npx @next/codemod new-async-api .
+This updates the codebase automatically.
